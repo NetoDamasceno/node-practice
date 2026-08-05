@@ -2,6 +2,7 @@
   "name": "simple-practice-node",
   "version": "1.0.0",
   "description": "Curso de Node.js",
+  "type": "module",
   "main": "index.js",
   "scripts": {
     "start:dev": "nodemon index.js"

@@ -1,15 +1,13 @@
-const { Person } = require("./person");
-const dotenv = require("dotenv");
-const connectToDataBase = require("./src/database/connect");
+import dotenv from "dotenv";
+import connectToDataBase from "./src/database/connect.js";
+import app from "./src/app.js";
 
 dotenv.config();
 
-connectToDataBase();
+await connectToDataBase();
 
-// require("./modules/path")
-// require("./modules/fs")
-// require("./modules/http");
+const PORT = process.env.PORT || 8080;
 
-require("./modules/express");
-
-// const person = new Person("Damasceno Neto");
+app.listen(PORT, () => {
+  console.log(`🚀 Servidor rodando na porta ${PORT}`);
+});

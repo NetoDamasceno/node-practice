@@ -1,5 +1,5 @@
-const express = require("express");
-const UserModel = require("../src/models/user.model");
+import express from "express";
+import UserModel from "./models/user.model.js";
 
 const app = express();
 
@@ -17,9 +17,13 @@ app.set("view engine", "ejs");
 app.set("views", "src/views");
 
 app.get("/views/users", async (req, res) => {
-  const users = await UserModel.find({});
+  try {
+    const users = await UserModel.find();
 
-  res.render("index", { users });
+    res.render("index", { users });
+  } catch (error) {
+    res.status(500).send(error.message);
+  }
 });
 
 app.get("/users", async (req, res) => {
@@ -77,6 +81,4 @@ app.delete("/users/:id", async (req, res) => {
   }
 });
 
-const port = 8080;
-
-app.listen(port, () => console.log(`Rodando com Express na porta ${port}!`));
+export default app;
