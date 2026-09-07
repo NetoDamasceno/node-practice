@@ -1,5 +1,5 @@
 import express from "express";
-import UserModel from "./models/user.model.js";
+import ClientModel from "./models/client.model.js";
 
 const app = express();
 
@@ -16,66 +16,65 @@ app.use((req, res, next) => {
 app.set("view engine", "ejs");
 app.set("views", "src/views");
 
-app.get("/views/users", async (req, res) => {
+app.get("/views/clients", async (req, res) => {
   try {
-    const users = await UserModel.find();
+    const clients = await ClientModel.find();
 
-    res.render("index", { users });
+    res.render("index", { clients });
   } catch (error) {
     res.status(500).send(error.message);
   }
 });
 
-app.get("/users", async (req, res) => {
+app.get("/clients", async (req, res) => {
   try {
-    const users = await UserModel.find({});
-    res.status(200).json(users);
+    const clients = await ClientModel.find();
+
+    res.status(200).json(clients);
+  } catch (error) {
+    res.status(500).send(error.message);
+  }
+});
+
+app.get("/clients/:id", async (req, res) => {
+  try {
+    const client = await ClientModel.findById(req.params.id);
+
+    return res.status(200).json(client);
   } catch (error) {
     return res.status(500).send(error.message);
   }
 });
 
-app.get("/users/:id", async (req, res) => {
+app.post("/clients", async (req, res) => {
   try {
-    const id = req.params.id;
+    const client = await ClientModel.create(req.body);
 
-    const user = await UserModel.findById(id);
-
-    return res.status(200).json(user);
-  } catch (error) {
-    return res.status(500).send(error.message);
-  }
-});
-
-app.post("/users", async (req, res) => {
-  try {
-    const user = await UserModel.create(req.body);
-
-    res.status(201).json(user);
+    res.status(201).json(client);
   } catch (error) {
     res.status(500).send(error.message);
   }
 });
 
-app.patch("/users/:id", async (req, res) => {
+app.patch("/clients/:id", async (req, res) => {
   try {
-    const id = req.params.id;
+    const client = await ClientModel.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      { new: true },
+    );
 
-    const user = await UserModel.findByIdAndUpdate(id, req.body, { new: true });
-
-    res.status(200).json(user);
+    res.status(200).json(client);
   } catch (error) {
     res.status(500).send(error.message);
   }
 });
 
-app.delete("/users/:id", async (req, res) => {
+app.delete("/clients/:id", async (req, res) => {
   try {
-    const id = req.params.id;
+    const client = await ClientModel.findByIdAndDelete(req.params.id);
 
-    const user = await UserModel.findByIdAndDelete(id);
-
-    res.status(200).json(user);
+    res.status(200).json(client);
   } catch (error) {
     res.status(500).send(error.message);
   }
