@@ -4,6 +4,7 @@ import ClientModel from "./models/client.model.js";
 const app = express();
 
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 app.use((req, res, next) => {
   console.log(`Request Type: ${req.method}`);
@@ -15,6 +16,10 @@ app.use((req, res, next) => {
 
 app.set("view engine", "ejs");
 app.set("views", "src/views");
+
+app.get("/views/clients/new", (req, res) => {
+  res.render("new-client");
+});
 
 app.get("/views/clients", async (req, res) => {
   try {
@@ -51,6 +56,16 @@ app.post("/clients", async (req, res) => {
     const client = await ClientModel.create(req.body);
 
     res.status(201).json(client);
+  } catch (error) {
+    res.status(500).send(error.message);
+  }
+});
+
+app.post("/views/clients", async (req, res) => {
+  try {
+    await ClientModel.create(req.body);
+
+    res.redirect("/views/clients");
   } catch (error) {
     res.status(500).send(error.message);
   }
