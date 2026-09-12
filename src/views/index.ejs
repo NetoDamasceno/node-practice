@@ -105,12 +105,15 @@
                   <th class="px-6 py-4 font-semibold">
                     Status
                   </th>
+
+                  <th class="px-6 py-4 text-right font-semibold">
+                    Ações
+                  </th>
                 </tr>
               </thead>
 
 
               <tbody class="divide-y divide-slate-100">
-
                 <% clients.forEach(client => { %>
 
                   <tr class="transition hover:bg-slate-50">
@@ -135,7 +138,7 @@
                     </td>
 
 
-                    <!-- Email -->
+                    <!-- E-mail -->
                     <td class="whitespace-nowrap px-6 py-4 text-slate-500">
                       <%= client.email %>
                     </td>
@@ -171,18 +174,50 @@
                         <span
                           class="inline-flex rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-medium text-emerald-700"
                         >
-                          Cliente
+                           Cliente
                         </span>
 
                       <% } %>
 
                     </td>
 
+
+                    <!-- Ações -->
+                    <td class="whitespace-nowrap px-6 py-4">
+                      <div class="flex justify-end gap-2">
+
+                        <!-- Editar -->
+                        <a
+                          href="/views/clients/<%= client._id %>/edit"
+                          class="rounded-lg border border-slate-200 px-3 py-1.5 text-xs font-medium text-slate-600 transition hover:bg-slate-50 hover:text-slate-900"
+                        >
+                          Editar
+                        </a>
+
+
+                        <!-- Excluir -->
+                        <form
+                          action="/views/clients/<%= client._id %>/delete"
+                          method="POST"
+                          onsubmit="return confirm('Tem certeza que deseja excluir este cliente?')"
+                        >
+
+                          <button
+                            type="submit"
+                            class="rounded-lg border border-red-200 px-3 py-1.5 text-xs font-medium text-red-600 transition hover:bg-red-50"
+                          >
+                            Excluir
+                          </button>
+
+                        </form>
+
+                      </div>
+                    </td>
+
                   </tr>
 
                 <% }) %>
-
-              </tbody>
+              </tbody> 
             </table>
           </div>
 

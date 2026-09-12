@@ -95,4 +95,54 @@ app.delete("/clients/:id", async (req, res) => {
   }
 });
 
+// Edição
+app.get("/views/clients/:id/edit", async (req, res) => {
+  try {
+    const client = await ClientModel.findById(req.params.id);
+
+    if (!client) {
+      return res.status(404).send("Cliente não encontrado.");
+    }
+
+    res.render("edit-client", { client });
+  } catch (error) {
+    res.status(500).send(error.message);
+  }
+});
+
+app.post("/views/clients/:id/edit", async (req, res) => {
+  try {
+    const client = await ClientModel.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      {
+        new: true,
+        runValidators: true,
+      },
+    );
+
+    if (!client) {
+      return res.status(404).send("Cliente não encontrado.");
+    }
+
+    res.redirect("/views/clients");
+  } catch (error) {
+    res.status(500).send(error.message);
+  }
+});
+
+app.post("/views/clients/:id/delete", async (req, res) => {
+  try {
+    const client = await ClientModel.findByIdAndDelete(req.params.id);
+
+    if (!client) {
+      return res.status(404).send("Cliente não encontrado.");
+    }
+
+    res.redirect("/views/clients");
+  } catch (error) {
+    res.status(500).send(error.message);
+  }
+});
+
 export default app;
