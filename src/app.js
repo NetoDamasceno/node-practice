@@ -1,5 +1,14 @@
 import express from "express";
+
 import ClientModel from "./models/client.model.js";
+
+import errorMiddleware from "./middlewares/error.middleware.js";
+import validate from "./middlewares/validate.middleware.js";
+
+import {
+  clientCreateSchema,
+  clientUpdateSchema,
+} from "./schemas/client.schema.js";
 
 const app = express();
 
@@ -31,67 +40,78 @@ app.get("/views/clients", async (req, res) => {
   }
 });
 
-app.get("/clients", async (req, res) => {
+app.get("/clients", async (req, res, next) => {
   try {
     const clients = await ClientModel.find();
 
     res.status(200).json(clients);
   } catch (error) {
-    res.status(500).send(error.message);
+    next(error);
   }
 });
 
-app.get("/clients/:id", async (req, res) => {
+app.get("/clients/:id", async (req, res, next) => {
   try {
     const client = await ClientModel.findById(req.params.id);
 
     return res.status(200).json(client);
   } catch (error) {
-    return res.status(500).send(error.message);
+    next(error);
   }
 });
 
-app.post("/clients", async (req, res) => {
+app.post("/clients", validate(clientCreateSchema), async (req, res, next) => {
   try {
     const client = await ClientModel.create(req.body);
 
     res.status(201).json(client);
   } catch (error) {
-    res.status(500).send(error.message);
+    next(error);
   }
 });
 
-app.post("/views/clients", async (req, res) => {
-  try {
-    await ClientModel.create(req.body);
+app.post(
+  "/views/clients",
+  validate(clientCreateSchema),
+  async (req, res, next) => {
+    try {
+      await ClientModel.create(req.body);
 
-    res.redirect("/views/clients");
-  } catch (error) {
-    res.status(500).send(error.message);
-  }
-});
+      res.redirect("/views/clients");
+    } catch (error) {
+      next(error);
+    }
+  },
+);
 
-app.patch("/clients/:id", async (req, res) => {
-  try {
-    const client = await ClientModel.findByIdAndUpdate(
-      req.params.id,
-      req.body,
-      { new: true },
-    );
+app.patch(
+  "/clients/:id",
+  validate(clientUpdateSchema),
+  async (req, res, next) => {
+    try {
+      const client = await ClientModel.findByIdAndUpdate(
+        req.params.id,
+        req.body,
+        {
+          new: true,
+          runValidators: true,
+        },
+      );
 
-    res.status(200).json(client);
-  } catch (error) {
-    res.status(500).send(error.message);
-  }
-});
+      res.status(200).json(client);
+    } catch (error) {
+      next(error);
+    }
+  },
+);
 
-app.delete("/clients/:id", async (req, res) => {
+app.delete("/clients/:id", async (req, res, next) => {
   try {
     const client = await ClientModel.findByIdAndDelete(req.params.id);
 
     res.status(200).json(client);
   } catch (error) {
-    res.status(500).send(error.message);
+    next(error);
   }
 });
 
@@ -110,26 +130,30 @@ app.get("/views/clients/:id/edit", async (req, res) => {
   }
 });
 
-app.post("/views/clients/:id/edit", async (req, res) => {
-  try {
-    const client = await ClientModel.findByIdAndUpdate(
-      req.params.id,
-      req.body,
-      {
-        new: true,
-        runValidators: true,
-      },
-    );
+app.post(
+  "/views/clients/:id/edit",
+  validate(clientUpdateSchema),
+  async (req, res, next) => {
+    try {
+      const client = await ClientModel.findByIdAndUpdate(
+        req.params.id,
+        req.body,
+        {
+          new: true,
+          runValidators: true,
+        },
+      );
 
-    if (!client) {
-      return res.status(404).send("Cliente não encontrado.");
+      if (!client) {
+        return res.status(404).send("Cliente não encontrado.");
+      }
+
+      res.redirect("/views/clients");
+    } catch (error) {
+      next(error);
     }
-
-    res.redirect("/views/clients");
-  } catch (error) {
-    res.status(500).send(error.message);
-  }
-});
+  },
+);
 
 app.post("/views/clients/:id/delete", async (req, res) => {
   try {
@@ -144,5 +168,16 @@ app.post("/views/clients/:id/delete", async (req, res) => {
     res.status(500).send(error.message);
   }
 });
+
+// Rota não encontrada
+app.use((req, res, next) => {
+  const error = new Error("Rota não encontrada.");
+  error.statusCode = 404;
+
+  next(error);
+});
+
+// Middleware global de tratamento de erros
+app.use(errorMiddleware);
 
 export default app;
