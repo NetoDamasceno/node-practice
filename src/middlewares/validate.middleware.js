@@ -1,34 +1,15 @@
-import { z } from "zod";
+const validate = (schema) => {
+  return (req, res, next) => {
+    const result = schema.safeParse(req.body);
 
-const clientCreateSchema = z.object({
-  firstName: z
-    .string()
-    .trim()
-    .min(2, "O nome deve ter pelo menos 2 caracteres."),
+    if (!result.success) {
+      return next(result.error);
+    }
 
-  lastName: z
-    .string()
-    .trim()
-    .min(2, "O sobrenome deve ter pelo menos 2 caracteres."),
+    req.body = result.data;
 
-  email: z
-    .string()
-    .trim()
-    .email("Informe um e-mail válido."),
-
-  phone: z
-    .string()
-    .trim()
-    .min(8, "Informe um telefone válido."),
-
-  status: z.enum(["new", "contacted", "customer"]),
-});
-
-
-const clientUpdateSchema = clientCreateSchema.partial();
-
-
-export {
-  clientCreateSchema,
-  clientUpdateSchema,
+    next();
+  };
 };
+
+export default validate;

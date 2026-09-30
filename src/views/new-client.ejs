@@ -30,6 +30,17 @@
         method="POST"
         class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm"
       >
+       <% if (errors && Object.keys(errors).length > 0) { %>
+        <div class="mb-6 rounded-lg border border-red-200 bg-red-50 px-4 py-3">
+          <p class="text-sm font-medium text-red-800">
+            Não foi possível cadastrar o cliente.
+          </p>
+
+          <p class="mt-1 text-sm text-red-700">
+            Verifique os campos destacados abaixo.
+          </p>
+        </div>
+       <% } %>
 
         <div class="grid gap-6 sm:grid-cols-2">
 
@@ -46,10 +57,17 @@
               type="text"
               id="firstName"
               name="firstName"
+              value="<%= formData?.firstName || "" %>"
               required
               class="w-full rounded-lg border border-slate-300 px-3 py-2.5 text-sm outline-none transition focus:border-slate-500 focus:ring-2 focus:ring-slate-200"
               placeholder="João"
             />
+
+            <% if (errors?.firstName) { %>
+              <p class="mt-1.5 text-xs text-red-600">
+                <%= errors.firstName[0] %>
+              </p>
+            <% } %>
           </div>
 
 
@@ -66,10 +84,17 @@
               type="text"
               id="lastName"
               name="lastName"
+              value="<%= formData?.lastName || "" %>"
               required
               class="w-full rounded-lg border border-slate-300 px-3 py-2.5 text-sm outline-none transition focus:border-slate-500 focus:ring-2 focus:ring-slate-200"
               placeholder="Silva"
             />
+
+            <% if (errors?.lastName) { %>
+              <p class="mt-1.5 text-xs text-red-600">
+                <%= errors.lastName[0] %>
+              </p>
+            <% } %>
           </div>
 
 
@@ -86,10 +111,17 @@
               type="email"
               id="email"
               name="email"
+              value="<%= formData?.email || "" %>"
               required
               class="w-full rounded-lg border border-slate-300 px-3 py-2.5 text-sm outline-none transition focus:border-slate-500 focus:ring-2 focus:ring-slate-200"
               placeholder="joao@email.com"
             />
+
+            <% if (errors?.email) { %>
+              <p class="mt-1.5 text-xs text-red-600">
+                <%= errors.email[0] %>
+              </p>
+            <% } %>
           </div>
 
 
@@ -106,10 +138,17 @@
               type="tel"
               id="phone"
               name="phone"
+              value="<%= formData?.phone || "" %>"
               required
               class="w-full rounded-lg border border-slate-300 px-3 py-2.5 text-sm outline-none transition focus:border-slate-500 focus:ring-2 focus:ring-slate-200"
               placeholder="(82) 99999-9999"
             />
+
+            <% if (errors?.phone) { %>
+              <p class="mt-1.5 text-xs text-red-600">
+                <%= errors.phone[0] %>
+              </p>
+            <% } %>
           </div>
 
 
@@ -127,10 +166,33 @@
               name="status"
               class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm outline-none transition focus:border-slate-500 focus:ring-2 focus:ring-slate-200"
             >
-              <option value="new">Novo</option>
-              <option value="contacted">Em contato</option>
-              <option value="customer">Cliente</option>
+              <option
+                value="new"
+                <%= formData?.status === "new" || !formData?.status ? "selected" : "" %>
+              >
+                Novo
+              </option>
+
+              <option
+                value="contacted"
+                <%= formData?.status === "contacted" ? "selected" : "" %>
+              >
+                Em contato
+              </option>
+
+              <option
+                value="customer"
+              <%= formData?.status === "customer" ? "selected" : "" %>
+              >
+               Cliente
+              </option>
             </select>
+
+            <% if (errors?.status) { %>
+              <p class="mt-1.5 text-xs text-red-600">
+                <%= errors.status[0] %>
+              </p>
+            <% } %>
           </div>
 
         </div>
