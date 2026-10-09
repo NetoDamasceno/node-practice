@@ -59,8 +59,10 @@
               name="firstName"
               value="<%= formData?.firstName || "" %>"
               required
-              class="w-full rounded-lg border border-slate-300 px-3 py-2.5 text-sm outline-none transition focus:border-slate-500 focus:ring-2 focus:ring-slate-200"
-              placeholder="João"
+              class="<%= errors?.firstName
+                ? 'w-full rounded-lg border border-red-400 px-3 py-2.5 text-sm outline-none transition focus:border-red-500 focus:ring-2 focus:ring-red-100'
+                : 'w-full rounded-lg border border-slate-300 px-3 py-2.5 text-sm outline-none transition focus:border-slate-500 focus:ring-2 focus:ring-slate-200'
+              %>"
             />
 
             <% if (errors?.firstName) { %>
@@ -86,8 +88,10 @@
               name="lastName"
               value="<%= formData?.lastName || "" %>"
               required
-              class="w-full rounded-lg border border-slate-300 px-3 py-2.5 text-sm outline-none transition focus:border-slate-500 focus:ring-2 focus:ring-slate-200"
-              placeholder="Silva"
+              class="<%= errors?.lastName
+                ? 'w-full rounded-lg border border-red-400 px-3 py-2.5 text-sm outline-none transition focus:border-red-500 focus:ring-2 focus:ring-red-100'
+                : 'w-full rounded-lg border border-slate-300 px-3 py-2.5 text-sm outline-none transition focus:border-slate-500 focus:ring-2 focus:ring-slate-200'
+              %>"
             />
 
             <% if (errors?.lastName) { %>
@@ -113,8 +117,10 @@
               name="email"
               value="<%= formData?.email || "" %>"
               required
-              class="w-full rounded-lg border border-slate-300 px-3 py-2.5 text-sm outline-none transition focus:border-slate-500 focus:ring-2 focus:ring-slate-200"
-              placeholder="joao@email.com"
+              class="<%= errors?.email
+                ? 'w-full rounded-lg border border-red-400 px-3 py-2.5 text-sm outline-none transition focus:border-red-500 focus:ring-2 focus:ring-red-100'
+                : 'w-full rounded-lg border border-slate-300 px-3 py-2.5 text-sm outline-none transition focus:border-slate-500 focus:ring-2 focus:ring-slate-200'
+              %>"
             />
 
             <% if (errors?.email) { %>
@@ -140,8 +146,10 @@
               name="phone"
               value="<%= formData?.phone || "" %>"
               required
-              class="w-full rounded-lg border border-slate-300 px-3 py-2.5 text-sm outline-none transition focus:border-slate-500 focus:ring-2 focus:ring-slate-200"
-              placeholder="(82) 99999-9999"
+              class="<%= errors?.phone
+                ? 'w-full rounded-lg border border-red-400 px-3 py-2.5 text-sm outline-none transition focus:border-red-500 focus:ring-2 focus:ring-red-100'
+                : 'w-full rounded-lg border border-slate-300 px-3 py-2.5 text-sm outline-none transition focus:border-slate-500 focus:ring-2 focus:ring-slate-200'
+              %>"
             />
 
             <% if (errors?.phone) { %>
@@ -164,7 +172,10 @@
             <select
               id="status"
               name="status"
-              class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm outline-none transition focus:border-slate-500 focus:ring-2 focus:ring-slate-200"
+              class="<%= errors?.status
+                ? 'w-full rounded-lg border border-red-400 bg-white px-3 py-2.5 text-sm outline-none transition focus:border-red-500 focus:ring-2 focus:ring-red-100'
+                : 'w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm outline-none transition focus:border-slate-500 focus:ring-2 focus:ring-slate-200'
+              %>"
             >
               <option
                 value="new"
